@@ -48,6 +48,22 @@ y_torque = np.full_like(x, Torque)          # Torque constante ao longo do eixo
 y_shear = np.full_like(x, F_resultante)     # Cortante constante (Carga Pontual)
 y_moment = F_resultante * x                 # Momento linear (0 na ponta, Max no apoio)
 
+# ==============================================================================
+# CONFIGURAÇÃO DE PLOTAGEM PARA ARTIGOS (Duas Colunas)
+# ==============================================================================
+# Aumenta o tamanho de tudo para ficar legível quando o LaTeX reduzir a imagem
+plt.rcParams.update({
+    'font.size': 14,          # Fonte base bem maior
+    'axes.titlesize': 16,     # Títulos maiores
+    'axes.labelsize': 14,     # Eixos X e Y maiores
+    'xtick.labelsize': 12,    # Números do eixo X
+    'ytick.labelsize': 12,    # Números do eixo Y
+    'legend.fontsize': 12,    # Legenda maior
+    'lines.linewidth': 2.5,   # Linhas do gráfico mais grossas
+    'grid.linewidth': 0.8,    # Grade mais visível
+    'figure.figsize': (10, 6) # Tamanho (largura, altura) em polegadas
+})
+
 # --- 4. PLOTAGEM DOS DIAGRAMAS ---
 fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 14), sharex=True)
 plt.subplots_adjust(hspace=0.3)

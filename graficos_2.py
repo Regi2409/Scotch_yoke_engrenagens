@@ -97,8 +97,8 @@ rect_yoke,  = ax_mech.plot([], [], '-', lw=9, color='#1f77b4')
 point_pin,  = ax_mech.plot([], [], 'o', color='#ff7f0e', ms=16, zorder=5)
 
 # Caixa de texto info (FONTE GRANDE 15)
-text_info = ax_mech.text(0, -145, '', ha='center', fontsize=15, 
-                         bbox=dict(facecolor='white', edgecolor='black', alpha=0.95, boxstyle='round,pad=0.8'))
+text_info = ax_mech.text(0, -110, '', ha='center', va='center', fontsize=18, fontweight='bold',
+                         bbox=dict(boxstyle="round,pad=0.5", facecolor='white', alpha=1.0, edgecolor='gray'))
 
 # --- Lado Direito: 4 Gráficos Empilhados (LETRAS GRANDES) ---
 

@@ -3,13 +3,11 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 import matplotlib.gridspec as gridspec
 
-# ==============================================================================
-# 1. PARÂMETROS E DADOS DE ENTRADA
-# ==============================================================================
+# PARÂMETROS E DADOS DE ENTRADA
 R_mm = 41.21             
 R_m  = R_mm / 1000.0     
 RPM_motor_in = 60.0      
-i_red = 0.5              
+i_red = 1              
 m_yoke_kg = 0.061        
 
 # Cálculos de Frequência
@@ -23,12 +21,12 @@ num_points = 1000
 t_vals = np.linspace(0, t_max, num_points)
 theta_vals = w_out * t_vals
 
-# --- CÁLCULOS CINEMÁTICOS ---
+# CÁLCULOS CINEMÁTICOS
 x_vals = R_mm * np.cos(theta_vals)
 v_vals = -R_mm * w_out * np.sin(theta_vals)
 a_vals = -R_mm * (w_out**2) * np.cos(theta_vals) # em mm/s²
 
-# --- CÁLCULOS DINÂMICOS ---
+# CÁLCULOS DINÂMICOS 
 a_vals_si = a_vals / 1000.0 # Convertendo para m/s²
 F_inercial = m_yoke_kg * a_vals_si # Newton
 
@@ -41,9 +39,7 @@ Torque_motor = Torque_crank * (w_out / w_motor)
 # Potência
 Power_vals = Torque_crank * w_out
 
-# ==============================================================================
-# 2. IMPRESSÃO DO RELATÓRIO COMPLETO (CONSOLE)
-# ==============================================================================
+# IMPRESSÃO DO RELATÓRIO COMPLETO
 print("\n" + "="*50)
 print(f"RELATORIO DE ANALISE DINAMICA - SCOTCH YOKE (Grupo 2)")
 print("="*50)
@@ -65,21 +61,16 @@ print(f" > Torque Max Motor:     {np.max(np.abs(Torque_motor)):.4f} N.m")
 print(f" > Potencia Maxima:      {np.max(np.abs(Power_vals)):.4f} W")
 print("="*50 + "\n")
 
-# ==============================================================================
-# 3. CONFIGURAÇÃO VISUAL "SUPER SIZE"
-# ==============================================================================
-# Tamanho gigante para caber tudo (Largura x Altura)
+# CONFIGURAÇÃO VISUAL
 fig = plt.figure(figsize=(19, 12)) 
 fig.canvas.manager.set_window_title('Simulação Completa - Grupo 2 CEFET-MG')
 
-# GridSpec: Coluna da direita (gráficos) mais larga (1.6x a esquerda)
 gs = gridspec.GridSpec(4, 2, width_ratios=[1, 1.6]) 
 
-# --- Lado Esquerdo: O Mecanismo ---
+# Lado Esquerdo: O Mecanismo 
 ax_mech = fig.add_subplot(gs[:, 0])
 ax_mech.set_title("Visualização do Mecanismo", fontsize=20, pad=25, fontweight='bold')
 
-# Limites aumentados para caber a caixa de texto grande
 ax_mech.set_xlim(-120, 120)
 ax_mech.set_ylim(-190, 130) 
 ax_mech.set_aspect('equal')
@@ -90,24 +81,23 @@ ax_mech.add_patch(plt.Circle((0, 0), R_mm, color='lightgray', fill=True, alpha=0
 ax_mech.add_patch(plt.Circle((0, 0), R_mm, color='gray', fill=False, linestyle='--'))
 ax_mech.text(0, -R_mm-12, 'Centro Rotação', ha='center', fontsize=12, color='gray')
 
-# Elementos Móveis (Linhas BEM grossas)
+# Elementos Móveis 
 line_crank, = ax_mech.plot([], [], 'o-', lw=7, color='#333333', ms=12, label='Manivela')
 line_slot,  = ax_mech.plot([], [], '-', lw=4, color='#d62728')
 rect_yoke,  = ax_mech.plot([], [], '-', lw=9, color='#1f77b4')
 point_pin,  = ax_mech.plot([], [], 'o', color='#ff7f0e', ms=16, zorder=5)
 
-# Caixa de texto info (FONTE GRANDE 15)
 text_info = ax_mech.text(0, -110, '', ha='center', va='center', fontsize=18, fontweight='bold',
                          bbox=dict(boxstyle="round,pad=0.5", facecolor='white', alpha=1.0, edgecolor='gray'))
 
-# --- Lado Direito: 4 Gráficos Empilhados (LETRAS GRANDES) ---
+# Lado Direito: 4 Gráficos Empilhados 
 
 # Configuração comum de fonte
 LABEL_SIZE = 16
 TICK_SIZE = 14
 LINE_WIDTH = 3.5
 
-# 1. Posição
+# Posição
 ax_pos = fig.add_subplot(gs[0, 1])
 ax_pos.plot(t_vals, x_vals, 'b-', lw=LINE_WIDTH)
 ax_pos.set_ylabel('Pos. (mm)', fontsize=LABEL_SIZE, fontweight='bold')
@@ -116,7 +106,7 @@ ax_pos.grid(True, linestyle=':', alpha=0.6)
 ax_pos.set_xticklabels([]) 
 point_pos, = ax_pos.plot([], [], 'bo', ms=10)
 
-# 2. Velocidade
+# Velocidade
 ax_vel = fig.add_subplot(gs[1, 1], sharex=ax_pos)
 ax_vel.plot(t_vals, v_vals, 'g-', lw=LINE_WIDTH)
 ax_vel.set_ylabel('Vel. (mm/s)', fontsize=LABEL_SIZE, fontweight='bold')
@@ -125,7 +115,7 @@ ax_vel.grid(True, linestyle=':', alpha=0.6)
 ax_vel.set_xticklabels([])
 point_vel, = ax_vel.plot([], [], 'go', ms=10)
 
-# 3. Aceleração
+# Aceleração
 ax_acc = fig.add_subplot(gs[2, 1], sharex=ax_pos)
 ax_acc.plot(t_vals, a_vals_si, color='purple', lw=LINE_WIDTH) 
 ax_acc.set_ylabel('Acel. (m/s²)', fontsize=LABEL_SIZE, fontweight='bold')
@@ -134,7 +124,7 @@ ax_acc.grid(True, linestyle=':', alpha=0.6)
 ax_acc.set_xticklabels([])
 point_acc, = ax_acc.plot([], [], 'o', color='purple', ms=10)
 
-# 4. Torque
+# Torque
 ax_tor = fig.add_subplot(gs[3, 1], sharex=ax_pos)
 ax_tor.plot(t_vals, Torque_crank, 'r-', lw=LINE_WIDTH)
 ax_tor.set_ylabel('Torque (N.m)', fontsize=LABEL_SIZE, fontweight='bold')
@@ -146,9 +136,7 @@ point_tor, = ax_tor.plot([], [], 'ro', ms=10)
 # Linha vertical comum
 vlines = [ax.axvline(0, color='k', ls='--', alpha=0.5, lw=2) for ax in [ax_pos, ax_vel, ax_acc, ax_tor]]
 
-# ==============================================================================
-# 4. UPDATE LOOP
-# ==============================================================================
+# UPDATE LOOP
 def update(val):
     t_curr = val
     idx = (np.abs(t_vals - t_curr)).argmin()

@@ -3,24 +3,20 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider, Button # Importei Button para o recurso extra
 import matplotlib.gridspec as gridspec
 
-# --- 1. CONFIGURAÇÃO ---
+# CONFIGURAÇÃO
 R = 41.21
 RPM_motor = 60
 i = 0.5
 w_motor = (RPM_motor * 2 * np.pi) / 60
 w_out = w_motor * i
 
-# --- 2. LAYOUT ---
+# LAYOUT
 fig = plt.figure(figsize=(12, 8))
 gs = gridspec.GridSpec(3, 2, width_ratios=[1, 1.5], hspace=0.4, wspace=0.3)
 
-# Subplot Mecanismo (Ajustado para dar espaço ao texto)
 ax_mech = fig.add_subplot(gs[:, 0])
 ax_mech.set_title("Simulação Visual: Scotch Yoke", fontsize=16, fontweight='bold')
 
-# AQUI ESTÁ O TRUQUE: 
-# Mudei os limites de Y. O centro (0,0) fica mais para cima.
-# Temos espaço livre de -60 até -160 para o texto.
 ax_mech.set_xlim(-110, 110)
 ax_mech.set_ylim(-160, 80) 
 ax_mech.set_aspect('equal')
@@ -54,7 +50,7 @@ ax_acc.set_ylabel('Acel. (mm/s²)', **label_font)
 ax_acc.set_xlabel('Tempo (s)', **label_font)
 ax_acc.grid(True, linestyle='--', alpha=0.6)
 
-# --- 3. DESENHOS ---
+# DESENHOS 
 # Mecanismo
 gear_circle = plt.Circle((0, 0), 40, color='#8B4513', fill=False, lw=3)
 ax_mech.add_patch(gear_circle)
@@ -69,12 +65,10 @@ dot_vel, = ax_vel.plot([], [], 'o', color='orange', ms=10)
 dot_acc, = ax_acc.plot([], [], 'ro', ms=10)
 vertical_lines = [ax.axvline(0, color='k', linestyle=':', alpha=0.5) for ax in [ax_pos, ax_vel, ax_acc]]
 
-# Caixa de Texto (Reposicionada mais para baixo)
-# Posição Y alterada para -110 (antes era -90)
 info_text = ax_mech.text(0, -110, '', ha='center', va='center', fontsize=16, fontweight='bold',
                          bbox=dict(boxstyle="round,pad=0.5", facecolor='white', alpha=1.0, edgecolor='gray'))
 
-# --- 4. ATUALIZAÇÃO ---
+# ATUALIZAÇÃO
 def update(val):
     t_current = val
     theta = w_out * t_current
@@ -111,7 +105,7 @@ def update(val):
     )
     fig.canvas.draw_idle()
 
-# --- 5. SLIDER ---
+# SLIDER 
 ax_slider = plt.axes([0.2, 0.02, 0.6, 0.03], facecolor='lightgoldenrodyellow')
 slider = Slider(ax_slider, 'Tempo (s)', 0, t_max, valinit=0)
 slider.on_changed(update)
